@@ -11,12 +11,12 @@ const Search = ({ query, setQuery, handleSubmit }: SearchProps) => {
   return (
     <Container>
       <h2 className='pad-left'>Search</h2>
-      <Form onSubmit={handleSubmit} className='d-flex w-50 mx-auto gap-2 mb-2'>
+      <Form onSubmit={handleSubmit} className='d-flex flex-column w-50 mx-auto gap-2 mb-2'>
         <Form.Control
           type='text'
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder='Enter a dish or main ingredient'
+          placeholder='Enter a dish or ingredient...'
         />
         <Button variant='primary' type='submit'>
           Search

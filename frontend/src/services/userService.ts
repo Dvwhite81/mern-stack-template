@@ -84,9 +84,27 @@ const deleteUserRecipe = async (username: string, recipeId: string) => {
   }
 };
 
+const getUserByToken = async (token: string) => {
+  const { data } = await axios.get(`${baseUrl}/users/${token}`);
+
+  if (data.success) {
+    return {
+      success: true,
+      message: data.message,
+      user: data.user,
+    };
+  } else {
+    return {
+      success: false,
+      message: data.message,
+    };
+  }
+};
+
 export default {
   addUserRecipe,
   deleteUserRecipe,
+  getUserByToken,
   getUserRecipes,
   login,
   register,

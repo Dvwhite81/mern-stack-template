@@ -3,6 +3,26 @@ const User = require('../models/user');
 
 const userRouter = express.Router();
 
+// Get user by token
+userRouter.get('/:token', async (req, res) => {
+  const { token } = req.params;
+
+  const userExists = await User.findOne({ token: token });
+
+  if (!userExists) {
+    return res.json({
+      success: false,
+      message: 'No user found with that token',
+    });
+  }
+
+  res.json({
+    success: true,
+    message: 'Found user by token successfully',
+    user: userExists,
+  });
+});
+
 // Get user recipes
 userRouter.get('/:username/recipes', async (req, res) => {
   const { username } = req.params;

@@ -12,6 +12,9 @@ const userSchema = new mongoose.Schema({
     required: true,
     minLength: 4,
   },
+  token: {
+    type: String,
+  },
   recipes: [],
 }, { timestamps: true });
 

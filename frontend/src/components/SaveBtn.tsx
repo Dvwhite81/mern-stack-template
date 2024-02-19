@@ -11,9 +11,9 @@ const SaveBtn = ({
   return (
     <Button className='save-btn' variant='dark'>
       {saved.includes(recipe) ? (
-        <DashCircleFill onClick={() => handleRemoveSave(recipe)} />
+        <DashCircleFill onClick={() => handleRemoveSave(recipe.id)} />
       ) : (
-        <PlusCircleFill onClick={() => handleSave(recipe)} />
+        <PlusCircleFill onClick={() => handleSave(recipe.id)} />
       )}
     </Button>
   );

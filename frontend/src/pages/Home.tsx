@@ -1,7 +1,6 @@
 import { SyntheticEvent } from 'react';
 import { Container } from 'react-bootstrap';
-import { Recipe, UserResult, UserType } from '../utils/types';
-import userService from '../services/userService';
+import { Recipe } from '../utils/types';
 import DisplayRecipes from '../components/DisplayRecipes';
 import Search from '../components/Search';
 
@@ -11,9 +10,8 @@ interface HomeProps {
   handleSubmit: (e: SyntheticEvent) => void
   recipes: Recipe[]
   saved: Recipe[]
-  setSaved: (recipe: Recipe[]) => void
-  loggedInUser: UserType | null
-  setMessage: (message: string) => void
+  handleSave: (recipe: string) => void
+  handleRemoveSave: (recipe: string) => void
 }
 
 const Home = ({
@@ -22,40 +20,10 @@ const Home = ({
   handleSubmit,
   recipes,
   saved,
-  setSaved,
-  loggedInUser,
-  setMessage,
+  handleSave,
+  handleRemoveSave,
 }: HomeProps) => {
-  const handleSave = async (recipeId: string) => {
-    if (!loggedInUser) return;
 
-    const result: UserResult = await userService.addUserRecipe(
-      loggedInUser.username,
-      recipeId,
-    );
-
-    if (result) {
-      const { message, recipes } = result;
-      setMessage(message);
-      if (recipes) {
-        setSaved(recipes);
-      }
-    }
-  };
-
-  const removeSave = async (recipeId: string) => {
-    if (loggedInUser && window.confirm('Unsave recipe?')) {
-      const result = await userService.deleteUserRecipe(loggedInUser.username, recipeId);
-
-      if (result) {
-        const { message, recipes } = result;
-        setMessage(message);
-        if (recipes) {
-          setSaved(recipes);
-        }
-      }
-    }
-  };
 
   return (
     <Container fluid>
@@ -64,7 +32,7 @@ const Home = ({
         recipes={recipes}
         saved={saved}
         handleSave={handleSave}
-        handleRemoveSave={removeSave}
+        handleRemoveSave={handleRemoveSave}
       />
     </Container>
   );

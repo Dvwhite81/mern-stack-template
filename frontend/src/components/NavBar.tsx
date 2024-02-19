@@ -6,16 +6,15 @@ import DropdownMenu from './DropdownMenu';
 import LogoutBtn from './LogoutBtn';
 
 interface NavBarProps {
-  categories: string[]
   loggedInUser: UserType | null
   handleLogout: () => void
 }
 
-const NavBar = ({ categories, loggedInUser, handleLogout }: NavBarProps) => {
+const NavBar = ({ loggedInUser, handleLogout }: NavBarProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const navigate = useNavigate();
 
-  const handleVisibleClick = () => () => setIsVisible((prev) => !prev);
+  const handleVisibleClick = () => setIsVisible((prev) => !prev);
 
   const handleLogoutClick = () => {
     handleLogout();
@@ -26,11 +25,14 @@ const NavBar = ({ categories, loggedInUser, handleLogout }: NavBarProps) => {
     <Navbar
       bg='dark'
       data-bs-theme='dark'
-      className='mx-0 d-flex justify-content-around p-2 rounded'
+      className='h-100 mx-0 d-flex justify-content-around p-2 rounded'
     >
       {!loggedInUser ? (
         <>
           <Link to='/register'>Sign Up</Link>
+          <Link to='/'>
+            <img id="nav-logo" src="/recipes-logo.png" alt="main recipes logo" />
+          </Link>
           <Link to='/login'>Log In</Link>
         </>
       ) : (
@@ -43,7 +45,6 @@ const NavBar = ({ categories, loggedInUser, handleLogout }: NavBarProps) => {
           >
             {isVisible && (
               <DropdownMenu
-                categories={categories}
                 handleClick={handleVisibleClick}
               />
             )}

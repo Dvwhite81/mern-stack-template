@@ -1,9 +1,8 @@
-import { SyntheticEvent, useState } from 'react';
+import { SyntheticEvent, useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
-import { Route, Routes } from 'react-router-dom';
+import { redirect, Route, Routes } from 'react-router-dom';
 import { getRecipes } from './services/recipeService';
-import { Recipe, UserType } from './utils/types';
-import { CATEGORIES } from './utils/helpers';
+import { Recipe, UserResult, UserType } from './utils/types';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import NavBar from './components/NavBar';
@@ -11,6 +10,9 @@ import Notification from './components/Notification';
 import Profile from './pages/Profile';
 import Register from './pages/Register';
 import './App.css';
+import userService from './services/userService';
+import { CATEGORIES } from './utils/helpers';
+import CategoryPage from './pages/CategoryPage';
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<UserType | null>(null);
@@ -34,13 +36,63 @@ function App() {
     setQuery('');
   };
 
+  const handleSave = async (recipeId: string) => {
+    if (!loggedInUser) return;
+
+    const result: UserResult = await userService.addUserRecipe(
+      loggedInUser.username,
+      recipeId
+    );
+
+    if (result) {
+      const { message, recipes } = result;
+      setMessage(message);
+      if (recipes) {
+        setSaved(recipes);
+      }
+    }
+  };
+
+  const removeSave = async (recipeId: string) => {
+    if (loggedInUser && window.confirm('Unsave recipe?')) {
+      const result = await userService.deleteUserRecipe(
+        loggedInUser.username,
+        recipeId
+      );
+
+      if (result) {
+        const { message, recipes } = result;
+        setMessage(message);
+        if (recipes) {
+          setSaved(recipes);
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    const checkLoggedIn = async () => {
+      const token = localStorage.getItem('token');
+
+      if (token) {
+        const data = await userService.getUserByToken(token);
+
+        if (data.success) {
+          const { user } = data;
+          setLoggedInUser(user);
+        }
+      } else {
+        setLoggedInUser(null);
+      }
+    };
+
+    checkLoggedIn();
+    redirect('/');
+  });
+
   return (
-    <Container fluid>
-      <NavBar
-        categories={CATEGORIES}
-        loggedInUser={loggedInUser}
-        handleLogout={handleLogout}
-      />
+    <Container fluid id='main-container'>
+      <NavBar loggedInUser={loggedInUser} handleLogout={handleLogout} />
       <Notification message={message} setMessage={setMessage} />
       <Routes>
         <Route
@@ -52,12 +104,25 @@ function App() {
               handleSubmit={handleSearchSubmit}
               recipes={recipes}
               saved={saved}
-              setSaved={setSaved}
-              loggedInUser={loggedInUser}
-              setMessage={setMessage}
+              handleSave={handleSave}
+              handleRemoveSave={removeSave}
             />
           }
         />
+        {CATEGORIES.map((category) => (
+          <Route
+            key={category}
+            path={`/categories/${category}`}
+            element={
+              <CategoryPage
+                category={category}
+                saved={saved}
+                handleSave={handleSave}
+                handleRemoveSave={removeSave}
+              />
+            }
+          />
+        ))}
         {loggedInUser ? (
           <Route
             path='/profile'

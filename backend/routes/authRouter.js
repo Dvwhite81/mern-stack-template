@@ -24,6 +24,7 @@ authRouter.post('/register', async (req, res) => {
   const newUser = new User({
     username: user.username,
     password: user.password,
+    token: '',
     recipes: [],
   });
 
@@ -72,6 +73,10 @@ authRouter.post('/login', async (req, res) => {
           message: `Error authenticating: ${err}`,
         });
       }
+
+      userExists.token = `Bearer ${token}`;
+
+      userExists.save();
 
       return res.json({
         success: true,

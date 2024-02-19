@@ -1,15 +1,15 @@
 import { Link } from 'react-router-dom';
 import { NavDropdown } from 'react-bootstrap';
+import { CATEGORIES } from '../utils/helpers';
 
 interface DropdownMenuProps {
-  categories: string[]
   handleClick: () => void
 }
 
-const DropdownMenu = ({ categories, handleClick }: DropdownMenuProps) => {
+const DropdownMenu = ({ handleClick }: DropdownMenuProps) => {
   return (
     <>
-      {categories.map((category) => (
+      {CATEGORIES.map((category) => (
         <NavDropdown.Item
           key={category}
           style={{ textAlign: 'center' }}
