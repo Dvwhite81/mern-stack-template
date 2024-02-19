@@ -16,10 +16,21 @@ export interface Recipe {
   id: string,
 }
 
+export interface SavedRecipe {
+  recipe: string,
+}
+
 export interface AuthResult {
   success: boolean,
-  user: UserType,
-  token: string,
+  message: string,
+  user?: UserType,
+  token?: string,
+}
+
+export interface UserResult {
+  success: boolean,
+  message: string,
+  recipes?: Recipe[],
 }
 
 export interface RecipeResult {

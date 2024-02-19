@@ -1,32 +1,43 @@
 import { SyntheticEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, Container, Form } from 'react-bootstrap';
-import authService from '../services/authService';
+import userService from '../services/userService';
 import { AuthResult, UserType } from '../utils/types';
 import FormInput from '../components/FormInput';
 
 interface LoginProps {
   setLoggedInUser: (user: UserType) => void
+  setMessage: (message: string) => void
 }
 
-const Login = ({ setLoggedInUser }: LoginProps) => {
+const Login = ({ setLoggedInUser, setMessage }: LoginProps) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = async (username: string, password: string) => {
-    console.log('handleLogin');
+    if (username === '' || password === '') {
+      setMessage('Please enter a username and password');
+      return;
+    }
 
-    const result: AuthResult | undefined = await authService.login(
+    const result: AuthResult | undefined = await userService.login(
       username,
       password
     );
 
     if (result) {
-      const { user, token } = result;
-      setLoggedInUser(user);
-      localStorage.setItem('token', token);
-      navigate('/');
+      const { success, message } = result;
+      if (success) {
+        const { user, token } = result;
+        if (user && token) {
+          setLoggedInUser(user);
+          localStorage.setItem('token', token);
+          navigate('/');
+        }
+      }
+
+      setMessage(message);
     }
   };
 

@@ -7,13 +7,11 @@ interface NotificationProps {
 
 const Notification = ({ message, setMessage }: NotificationProps) => {
   const hide = () => {
-    setMessage(null);
+    if (message) {
+      setMessage(null);
+    }
   };
-  /*
-  setTimeout(() => {
-    hide();
-  }, 2000);
-*/
+
   if (message === null) return;
 
   return (

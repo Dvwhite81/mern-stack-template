@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const authRouter = require('./routes/authRouter');
+const userRouter = require('./routes/userRouter');
 
 const app = express();
 
@@ -15,9 +16,10 @@ const dbURI = process.env.MONGODB_URI;
 const PORT = process.env.PORT;
 
 mongoose.connect(dbURI)
-  .then((res) => {
+  .then(() => {
     app.listen(PORT, () => console.log(`Server live on port ${PORT}`));
   })
   .catch((err) => console.log(`Error connecting: ${err}`));
 
 app.use('/', authRouter);
+app.use('/users', userRouter);

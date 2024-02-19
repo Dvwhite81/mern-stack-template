@@ -39,7 +39,7 @@ authRouter.post('/login', async (req, res) => {
   const loggingUser = req.body;
 
   const userExists = await User.findOne({ username: loggingUser.username });
-
+  console.log('authRouter userExists:', userExists);
   if (!userExists) {
     return res.json({
       success: false,

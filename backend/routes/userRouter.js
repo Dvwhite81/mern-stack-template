@@ -1,0 +1,91 @@
+const express = require('express');
+const User = require('../models/user');
+
+const userRouter = express.Router();
+
+// Get user recipes
+userRouter.get('/:username/recipes', async (req, res) => {
+  const { username } = req.params;
+
+  const userExists = await User.findOne({ username: username });
+
+  if (!userExists) {
+    return res.json({
+      success: false,
+      message: 'No user found with that username',
+    });
+  }
+
+  res.json({
+    success: true,
+    recipes: userExists.recipes,
+  });
+});
+
+// User save recipe
+userRouter.put('/:username/recipes', async (req, res) => {
+  const { username } = req.params;
+
+  const userExists = await User.findOne({ username: username });
+
+  if (!userExists) {
+    return res.json({
+      success: false,
+      message: 'No user found with that username',
+    });
+  }
+
+  const recipeId = req.body;
+  const { recipes } = userExists;
+
+  userExists.recipes = [...recipes, recipeId];
+  const updatedUser = await userExists.save();
+
+  if (updatedUser) {
+    return res.json({
+      success: true,
+      message: 'Saved recipe successfully',
+      recipes: updatedUser.recipes,
+    });
+  } else {
+    return res.json({
+      success: false,
+      message: 'Error saving recipe',
+    });
+  }
+});
+
+// User remove saved recipe
+userRouter.put('/:username/recipes', async (req, res) => {
+  const { username } = req.params;
+
+  const userExists = await User.findOne({ username: username });
+
+  if (!userExists) {
+    return res.json({
+      success: false,
+      message: 'No user found with that username',
+    });
+  }
+
+  const recipeId = req.body;
+  const { recipes } = userExists;
+
+  userExists.recipes = recipes.filter((r) => r !== recipeId);
+  const updatedUser = await userExists.save();
+
+  if (updatedUser) {
+    return res.json({
+      success: true,
+      message: 'Deleted recipe successfully',
+      recipes: updatedUser.recipes,
+    });
+  } else {
+    return res.json({
+      success: false,
+      message: 'Error deleting recipe',
+    });
+  }
+});
+
+module.exports = userRouter;

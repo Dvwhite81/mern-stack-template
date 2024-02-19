@@ -1,15 +1,16 @@
 import { SyntheticEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, Container, Form } from 'react-bootstrap';
-import authService from '../services/authService';
+import userService from '../services/userService';
 import { AuthResult, UserType } from '../utils/types';
 import FormInput from '../components/FormInput';
 
 interface RegisterProps {
   setLoggedInUser: (user: UserType) => void
+  setMessage: (message: string) => void
 }
 
-const Register = ({ setLoggedInUser }: RegisterProps) => {
+const Register = ({ setLoggedInUser, setMessage }: RegisterProps) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmation, setConfirmation] = useState('');
@@ -20,23 +21,45 @@ const Register = ({ setLoggedInUser }: RegisterProps) => {
     password: string,
     confirmation: string
   ) => {
-    console.log('handleRegister');
+    if (username === '' || password === '') {
+      setMessage('Please enter a username and password');
+      return;
+    }
+
+    if (username.length < 3) {
+      setMessage('Username must be at least three characters');
+      return;
+    }
+
+    if (password.length < 4) {
+      setMessage('Password must be at least four characters');
+      return;
+    }
 
     if (password !== confirmation) {
-      console.log('passwords do not match');
+      setMessage('Password and confirmation do not match');
     } else {
-      const result: AuthResult | undefined = await authService.register(
+      const result: AuthResult | undefined = await userService.register(
         username,
         password
       );
 
       if (result) {
-        const { user, token } = result;
-        setLoggedInUser(user);
-        localStorage.setItem('token', token);
-        navigate('/');
-      } else {
-        console.log('no success');
+        console.log('handleRegister result:', result);
+        const { success, message } = result;
+        if (success) {
+          console.log('handleRegister success:', success);
+          const { user, token } = result;
+          console.log('handleRegister user, token:', user, token);
+          if (user && token) {
+            console.log('handleRegister user && token');
+            setLoggedInUser(user);
+            localStorage.setItem('token', token);
+            navigate('/');
+          }
+        }
+
+        setMessage(message);
       }
     }
   };
