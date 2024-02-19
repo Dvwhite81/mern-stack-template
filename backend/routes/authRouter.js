@@ -59,7 +59,7 @@ authRouter.post('/login', async (req, res) => {
   const payload = {
     id: userExists._id,
     username: userExists.username,
-  }
+  };
 
   jwt.sign(
     payload,
@@ -80,7 +80,7 @@ authRouter.post('/login', async (req, res) => {
         token: `Bearer ${token}`,
       });
     }
-  )
+  );
 });
 
 authRouter.get('/getUser', verifyJWT, (req, res) => {
