@@ -1,4 +1,4 @@
-import { UserType } from '../types';
+import { UserType } from '../utils/types';
 
 interface ProfileProps {
   loggedInUser: UserType

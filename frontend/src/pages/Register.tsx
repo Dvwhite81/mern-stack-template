@@ -1,7 +1,9 @@
 import { SyntheticEvent, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { Button, Container, Form } from 'react-bootstrap';
 import authService from '../services/authService';
-import { AuthResult, UserType } from '../types';
+import { AuthResult, UserType } from '../utils/types';
+import FormInput from '../components/FormInput';
 
 interface RegisterProps {
   setLoggedInUser: (user: UserType) => void
@@ -38,6 +40,7 @@ const Register = ({ setLoggedInUser }: RegisterProps) => {
       }
     }
   };
+
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
 
@@ -45,24 +48,33 @@ const Register = ({ setLoggedInUser }: RegisterProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type='text'
-        value={username}
-        onChange={({ target }) => setUsername(target.value)}
-      />
-      <input
-        type='password'
-        value={password}
-        onChange={({ target }) => setPassword(target.value)}
-      />
-      <input
-        type='password'
-        value={confirmation}
-        onChange={({ target }) => setConfirmation(target.value)}
-      />
-      <input type='submit' value='Sign Up' />
-    </form>
+    <Container fluid>
+      <h2>Sign Up</h2>
+      <Form className='user-form' onSubmit={handleSubmit}>
+        <FormInput
+          label='Username'
+          type='text'
+          value={username}
+          setValue={setUsername}
+        />
+        <FormInput
+          label='Password'
+          type='password'
+          value={password}
+          setValue={setPassword}
+        />
+        <FormInput
+          label='Confirm'
+          type='password'
+          value={confirmation}
+          setValue={setConfirmation}
+        />
+        <Button type='submit'>Sign Up</Button>
+      </Form>
+      <p className='text-center'>
+        Already have an account? <Link to='/login'>Log In</Link>
+      </p>
+    </Container>
   );
 };
 

@@ -21,3 +21,7 @@ export interface AuthResult {
   user: UserType,
   token: string,
 }
+
+export interface RecipeResult {
+  recipe: Recipe,
+}

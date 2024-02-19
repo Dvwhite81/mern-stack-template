@@ -1,7 +1,9 @@
 import { SyntheticEvent, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { Button, Container, Form } from 'react-bootstrap';
 import authService from '../services/authService';
-import { AuthResult, UserType } from '../types';
+import { AuthResult, UserType } from '../utils/types';
+import FormInput from '../components/FormInput';
 
 interface LoginProps {
   setLoggedInUser: (user: UserType) => void
@@ -35,11 +37,27 @@ const Login = ({ setLoggedInUser }: LoginProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input type="text" value={username} onChange={({ target }) => setUsername(target.value)} />
-      <input type="password" value={password} onChange={({ target }) => setPassword(target.value)} />
-      <input type="submit" value="Log In" />
-    </form>
+    <Container fluid>
+      <h2>Login</h2>
+      <Form className='user-form' onSubmit={handleSubmit}>
+        <FormInput
+          label='Username'
+          type='text'
+          value={username}
+          setValue={setUsername}
+        />
+        <FormInput
+          label='Password'
+          type='password'
+          value={password}
+          setValue={setPassword}
+        />
+        <Button type='submit'>Log In</Button>
+      </Form>
+      <p className='text-center'>
+        Don't have an account? <Link to='/register'>Sign up</Link>
+      </p>
+    </Container>
   );
 };
 

@@ -1,22 +1,33 @@
+import { useState } from 'react';
+import { NavDropdown, Navbar } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
-import { UserType } from '../types';
+import { UserType } from '../utils/types';
+import DropdownMenu from './DropdownMenu';
+import LogoutBtn from './LogoutBtn';
 
 interface NavBarProps {
-  loggedInUser: UserType | null,
-  handleLogout: () => void,
+  categories: string[]
+  loggedInUser: UserType | null
+  handleLogout: () => void
 }
 
-const NavBar = ({ loggedInUser, handleLogout }: NavBarProps) => {
+const NavBar = ({ categories, loggedInUser, handleLogout }: NavBarProps) => {
+  const [isVisible, setIsVisible] = useState(false);
   const navigate = useNavigate();
-  console.log('navbar loggedInUser:', loggedInUser);
 
-  const handleClick = () => {
+  const handleVisibleClick = () => () => setIsVisible((prev) => !prev);
+
+  const handleLogoutClick = () => {
     handleLogout();
     navigate('/');
   };
 
   return (
-    <div>
+    <Navbar
+      bg='dark'
+      data-bs-theme='dark'
+      className='mx-0 d-flex justify-content-around p-2 rounded'
+    >
       {!loggedInUser ? (
         <>
           <Link to='/register'>Sign Up</Link>
@@ -25,13 +36,23 @@ const NavBar = ({ loggedInUser, handleLogout }: NavBarProps) => {
       ) : (
         <>
           <Link to='/'>Home</Link>
+          <NavDropdown
+            style={{ color: 'whitesmoke' }}
+            title='Categories'
+            onClick={handleVisibleClick}
+          >
+            {isVisible && (
+              <DropdownMenu
+                categories={categories}
+                handleClick={handleVisibleClick}
+              />
+            )}
+          </NavDropdown>
           <Link to='/profile'>Profile</Link>
-          <button type='button' onClick={handleClick}>
-            Log Out
-          </button>
+          <LogoutBtn handleLogout={handleLogoutClick} />
         </>
       )}
-    </div>
+    </Navbar>
   );
 };
 
