@@ -26,8 +26,8 @@ const verifyJWT = (req, res, next) => {
     req.user.recipes = decoded.recipes;
     next();
   });
-}
+};
 
 module.exports = {
   verifyJWT,
-}
+};

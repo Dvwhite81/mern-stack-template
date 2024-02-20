@@ -16,7 +16,7 @@ const Search = ({ query, setQuery, handleSubmit }: SearchProps) => {
           type='text'
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder='Enter a dish or ingredient...'
+          placeholder='Enter a search term...'
         />
         <Button variant='primary' type='submit'>
           Search

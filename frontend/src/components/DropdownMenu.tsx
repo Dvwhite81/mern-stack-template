@@ -1,6 +1,5 @@
 import { NavDropdown } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { CATEGORIES } from '../utils/helpers';
 
 interface DropdownMenuProps {
   handleClick: () => void
@@ -14,9 +13,18 @@ const DropdownMenu = ({ handleClick }: DropdownMenuProps) => {
     handleClick();
   };
 
+  const dummyCategories = [
+    'category 1',
+    'category 2',
+    'category 3',
+    'category 4',
+    'category 5',
+    'category 6',
+  ];
+
   return (
     <>
-      {CATEGORIES.map((category) => (
+      {dummyCategories.map((category) => (
         <NavDropdown.Item
           key={category}
           style={{ marginTop: '1rem', textAlign: 'center',  }}
