@@ -1,17 +1,20 @@
 :root {
+  --dark-bg: #212529;
   --navbar-height: 10vh;
-  --main-height: 90vh;
-}
-
-#root {
-  background: linear-gradient(to top, black, lightgray);
-  height: 100vh;
+  --main-height: 90%;
+  --min-main-height: 90vh;
 }
 
 #main-container {
   display: grid;
-  grid-template-rows: var(--navbar-height) var(--main-height);
+  grid-template-rows: var(--navbar-height) var(--min-main-height);
+  height: 100%;
   padding: 0;
+}
+
+.dropdown-menu[data-bs-popper].show {
+  left: 50%;
+  transform: translate(-50%, 5%);
 }
 
 .grid-container {
@@ -22,11 +25,6 @@
   width: 90vw;
 }
 
-.dropdown-menu.show {
-  left: 50%!important;
-  transform: translate(-50%);
-}
-
 a {
   color: whitesmoke;
   text-decoration: none;
@@ -34,6 +32,12 @@ a {
 
 .card {
   text-align: center;
+}
+
+.card-header {
+  display: flex;
+  height: 15vh;
+  padding-bottom: 1rem!important;
 }
 
 img.card-img-top {
@@ -90,7 +94,7 @@ button {
 }
 
 #main-logo:hover {
-  background-color: #212529;
+  background-color: var(--dark-bg);
   transform: scale(1.2);
 }
 

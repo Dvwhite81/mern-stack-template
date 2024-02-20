@@ -35,7 +35,7 @@ userRouter.get('/:username/recipes', async (req, res) => {
       message: 'No user found with that username',
     });
   }
-
+  console.log('backend userExists.recipes:', userExists.recipes);
   res.json({
     success: true,
     recipes: userExists.recipes,
@@ -43,7 +43,9 @@ userRouter.get('/:username/recipes', async (req, res) => {
 });
 
 // User save recipe
-userRouter.put('/:username/recipes', async (req, res) => {
+userRouter.post('/:username/recipes', async (req, res) => {
+  console.log('req.body:', req.body);
+
   const { username } = req.params;
 
   const userExists = await User.findOne({ username: username });
@@ -55,16 +57,20 @@ userRouter.put('/:username/recipes', async (req, res) => {
     });
   }
 
-  const recipeId = req.body;
+  const { recipe } = req.body;
   const { recipes } = userExists;
+  console.log('backend userExists:', userExists);
+  console.log('backend recipes:', recipes);
+  console.log('backend recipe', recipe);
 
-  userExists.recipes = [...recipes, recipeId];
+  userExists.recipes = [...recipes, recipe];
   const updatedUser = await userExists.save();
 
   if (updatedUser) {
     return res.json({
       success: true,
       message: 'Saved recipe successfully',
+      newRecipe: recipe,
       recipes: updatedUser.recipes,
     });
   } else {
@@ -88,10 +94,10 @@ userRouter.put('/:username/recipes', async (req, res) => {
     });
   }
 
-  const recipeId = req.body;
+  const recipe = req.body;
   const { recipes } = userExists;
 
-  userExists.recipes = recipes.filter((r) => r !== recipeId);
+  userExists.recipes = recipes.filter((r) => r.uri !== recipe.uri);
   const updatedUser = await userExists.save();
 
   if (updatedUser) {

@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
 import { NavDropdown } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import { CATEGORIES } from '../utils/helpers';
 
 interface DropdownMenuProps {
@@ -7,21 +7,28 @@ interface DropdownMenuProps {
 }
 
 const DropdownMenu = ({ handleClick }: DropdownMenuProps) => {
+  const navigate = useNavigate();
+
+  const handleLinkClick = (category: string) => {
+    navigate(`/categories/${category}`);
+    handleClick();
+  };
+
   return (
     <>
       {CATEGORIES.map((category) => (
         <NavDropdown.Item
           key={category}
-          style={{ textAlign: 'center',  }}
+          style={{ marginTop: '1rem', textAlign: 'center',  }}
           onClick={handleClick}
         >
-          <Link
+          <p
             key={category}
             style={{ color: 'whitesmoke' }}
-            to={`/categories/${category}`}
+            onClick={() => handleLinkClick(category)}
           >
             {category}
-          </Link>
+          </p>
         </NavDropdown.Item>
       ))}
     </>

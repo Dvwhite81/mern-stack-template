@@ -5,7 +5,6 @@ import { UserType } from '../utils/types';
 import LogoutBtn from './LogoutBtn';
 import DropdownMenu from './DropdownMenu';
 
-
 interface NavBarProps {
   loggedInUser: UserType | null
   handleLogout: () => void
@@ -26,17 +25,17 @@ const NavBar = ({ loggedInUser, handleLogout }: NavBarProps) => {
     <Navbar
       bg='dark'
       data-bs-theme='dark'
-      className='h-100 mx-0 d-flex p-2 justify-content-around rounded'
+      className='h-100 mx-0 d-flex p-2 rounded'
     >
       {loggedInUser ? (
-        <Link to='/home'>Home</Link>
+        <Link to='/profile'>Profile</Link>
       ) : (
         <Link to='/register'>Sign Up</Link>
       )}
       <NavDropdown
         style={{
           color: 'whitesmoke',
-          margin: '0 auto',
+          margin: 'auto',
           width: 'fit-content',
         }}
         title='Categories'
@@ -45,7 +44,7 @@ const NavBar = ({ loggedInUser, handleLogout }: NavBarProps) => {
         {isVisible && <DropdownMenu handleClick={handleVisibleClick} />}
       </NavDropdown>
       {loggedInUser ? (
-        <Link to='/profile'>Profile</Link>
+        <Link to='/saved'>Saved</Link>
       ) : (
         <Link to='/login'>Log In</Link>
       )}

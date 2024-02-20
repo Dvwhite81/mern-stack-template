@@ -5,25 +5,25 @@ import { getRecipes } from './services/recipeService';
 import { Recipe, UserResult, UserType } from './utils/types';
 import { CATEGORIES } from './utils/helpers';
 import userService from './services/userService';
+import CategoryPage from './pages/CategoryPage';
 import Home from './pages/Home';
 import Login from './pages/Login';
+import MainLogo from './components/MainLogo';
 import NavBar from './components/NavBar';
 import Notification from './components/Notification';
 import Profile from './pages/Profile';
 import Register from './pages/Register';
-import CategoryPage from './pages/CategoryPage';
+import SavedRecipes from './pages/SavedRecipes';
 import './App.css';
-import MainLogo from './components/MainLogo';
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<UserType | null>(null);
   const [query, setQuery] = useState<string>('');
   const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [saved, setSaved] = useState<Recipe[]>([]);
+  const [savedRecipes, setSavedRecipes] = useState<Recipe[]>([]);
   const [message, setMessage] = useState<string | null>(null);
 
   const handleLogout = () => {
-    console.log('handleLogout');
     setLoggedInUser(null);
     localStorage.removeItem('token');
     setMessage('Logged Out!');
@@ -37,35 +37,40 @@ function App() {
     setQuery('');
   };
 
-  const handleSave = async (recipeId: string) => {
+  const handleSave = async (recipe: Recipe) => {
     if (!loggedInUser) return;
+
+    console.log('app username:', loggedInUser.username);
 
     const result: UserResult = await userService.addUserRecipe(
       loggedInUser.username,
-      recipeId
+      recipe
     );
+    console.log('app result:', result);
 
     if (result) {
-      const { message, recipes } = result;
+      const { message, newRecipe } = result;
+      console.log('app newRecipe:', newRecipe);
+
       setMessage(message);
-      if (recipes) {
-        setSaved(recipes);
+      if (newRecipe) {
+        setSavedRecipes([...savedRecipes, recipe]);
       }
     }
   };
 
-  const removeSave = async (recipeId: string) => {
+  const removeSave = async (recipe: Recipe) => {
     if (loggedInUser && window.confirm('Unsave recipe?')) {
       const result = await userService.deleteUserRecipe(
         loggedInUser.username,
-        recipeId
+        recipe
       );
 
       if (result) {
         const { message, recipes } = result;
         setMessage(message);
         if (recipes) {
-          setSaved(recipes);
+          setSavedRecipes(recipes);
         }
       }
     }
@@ -91,11 +96,33 @@ function App() {
     redirect('/');
   });
 
+  useEffect(() => {
+    if (!loggedInUser) {
+      return;
+    }
+
+    const { username } = loggedInUser;
+
+    const fetchRecipes = async () => {
+      const saved = await userService.getUserRecipes(username);
+      if (saved) {
+        console.log('saved:', saved);
+        setSavedRecipes(saved.recipes);
+      }
+    };
+
+    fetchRecipes();
+  });
+
   return (
     <Container fluid id='main-container'>
       <NavBar loggedInUser={loggedInUser} handleLogout={handleLogout} />
       <Notification message={message} setMessage={setMessage} />
-      <Container fluid className='d-flex flex-column' style={{ height: 'var(--main-height)' }}>
+      <Container
+        fluid
+        className='d-flex flex-column'
+        style={{ height: 'var(--main-height)' }}
+      >
         <MainLogo />
         <Routes>
           <Route
@@ -106,7 +133,7 @@ function App() {
                 setQuery={setQuery}
                 handleSubmit={handleSearchSubmit}
                 recipes={recipes}
-                saved={saved}
+                savedRecipes={savedRecipes}
                 handleSave={handleSave}
                 handleRemoveSave={removeSave}
                 loggedInUser={loggedInUser}
@@ -120,7 +147,7 @@ function App() {
               element={
                 <CategoryPage
                   category={category}
-                  saved={saved}
+                  savedRecipes={savedRecipes}
                   handleSave={handleSave}
                   handleRemoveSave={removeSave}
                   loggedInUser={loggedInUser}
@@ -129,10 +156,23 @@ function App() {
             />
           ))}
           {loggedInUser ? (
-            <Route
-              path='/profile'
-              element={<Profile loggedInUser={loggedInUser} />}
-            />
+            <>
+              <Route
+                path='/profile'
+                element={<Profile loggedInUser={loggedInUser} />}
+              />
+              <Route
+                path='/saved'
+                element={
+                  <SavedRecipes
+                    savedRecipes={savedRecipes}
+                    handleSave={handleSave}
+                    handleRemoveSave={removeSave}
+                    loggedInUser={loggedInUser}
+                  />
+                }
+              />
+            </>
           ) : (
             <>
               <Route

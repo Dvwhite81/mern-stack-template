@@ -2,7 +2,7 @@ export interface UserType {
   _id: string,
   username: string,
   password: string,
-  recipes: Recipe[],
+  recipes: string[],
   createdAt: string,
   updatedAt: string,
 }
@@ -13,11 +13,10 @@ export interface Recipe {
   image: string,
   ingredientLines: string[],
   url: string,
-  id: string,
 }
 
 export interface SavedRecipe {
-  recipe: string,
+  recipe: Recipe,
 }
 
 export interface AuthResult {
@@ -30,6 +29,7 @@ export interface AuthResult {
 export interface UserResult {
   success: boolean,
   message: string,
+  newRecipe?: Recipe,
   recipes?: Recipe[],
 }
 

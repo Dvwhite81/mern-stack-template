@@ -4,23 +4,23 @@ import { Recipe } from '../utils/types';
 
 interface SaveBtnProps {
   recipe: Recipe
-  saved: Recipe[]
-  handleSave: (recipe: string) => void
-  handleRemoveSave: (recipe: string) => void
+  savedRecipes: Recipe[]
+  handleSave: (recipe: Recipe) => void
+  handleRemoveSave: (recipe: Recipe) => void
 }
 
 const SaveBtn = ({
   recipe,
-  saved,
+  savedRecipes,
   handleSave,
   handleRemoveSave,
 }: SaveBtnProps) => {
   return (
     <Button className='save-btn' variant='dark'>
-      {saved.includes(recipe) ? (
-        <DashCircleFill onClick={() => handleRemoveSave(recipe.id)} />
+      {savedRecipes.includes(recipe) ? (
+        <DashCircleFill onClick={() => handleRemoveSave(recipe)} />
       ) : (
-        <PlusCircleFill onClick={() => handleSave(recipe.id)} />
+        <PlusCircleFill onClick={() => handleSave(recipe)} />
       )}
     </Button>
   );

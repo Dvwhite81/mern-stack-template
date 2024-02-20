@@ -9,7 +9,7 @@ interface SearchProps {
 
 const Search = ({ query, setQuery, handleSubmit }: SearchProps) => {
   return (
-    <Container>
+    <Container fluid>
       <h2 className='pad-left'>Search</h2>
       <Form onSubmit={handleSubmit} className='d-flex flex-column w-50 mx-auto gap-2 mb-2'>
         <Form.Control

@@ -4,15 +4,15 @@ import RecipeCard from './RecipeCard';
 
 export interface DisplayProps {
   recipes: Recipe[]
-  saved: Recipe[]
-  handleSave: (recipeId: string) => void
-  handleRemoveSave: (recipeId: string) => void
+  savedRecipes: Recipe[]
+  handleSave: (recipe: Recipe) => void
+  handleRemoveSave: (recipe: Recipe) => void
   loggedInUser: UserType | null
 }
 
 const DisplayRecipes = ({
   recipes,
-  saved,
+  savedRecipes,
   handleSave,
   handleRemoveSave,
   loggedInUser,
@@ -24,7 +24,7 @@ const DisplayRecipes = ({
           <RecipeCard
             key={idx}
             recipe={recipe}
-            saved={saved}
+            savedRecipes={savedRecipes}
             handleSave={handleSave}
             handleRemoveSave={handleRemoveSave}
             loggedInUser={loggedInUser}

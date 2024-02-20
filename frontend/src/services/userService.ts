@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Recipe } from '../utils/types';
 
 const baseUrl = 'http://localhost:7000';
 
@@ -40,9 +41,11 @@ const register = async (username: string, password: string) => {
 };
 
 const getUserRecipes = async (username: string) => {
-  const { data } = await axios.get(`${baseUrl}/users/${username}`);
-
+  const { data } = await axios.get(`${baseUrl}/users/${username}/recipes`);
+  console.log('getUserRecipes data:', data);
   if (data.success) {
+    console.log('getUserRecipes data.recipes:', data.recipes);
+
     return {
       success: true,
       recipes: data.recipes,
@@ -55,13 +58,16 @@ const getUserRecipes = async (username: string) => {
   }
 };
 
-const addUserRecipe = async (username: string, recipeId: string) => {
-  const { data } = await axios.put(`${baseUrl}/users/${username}/recipes`, recipeId);
+const addUserRecipe = async (username: string, recipe: Recipe) => {
+  console.log('frontend username:', username);
+  console.log('frontend recipeId', recipe);
+  const { data } = await axios.post(`${baseUrl}/users/${username}/recipes`, { recipe: recipe });
 
   if (data.success) {
     return {
       success: true,
       message: data.message,
+      newRecipe: recipe,
       recipes: data.recipes,
     };
   } else {
@@ -72,8 +78,8 @@ const addUserRecipe = async (username: string, recipeId: string) => {
   }
 };
 
-const deleteUserRecipe = async (username: string, recipeId: string) => {
-  const { data } = await axios.put(`${baseUrl}/users/${username}/recipes`, recipeId);
+const deleteUserRecipe = async (username: string, recipe: Recipe) => {
+  const { data } = await axios.put(`${baseUrl}/users/${username}/recipes`, recipe);
 
   if (data.success) {
     return {

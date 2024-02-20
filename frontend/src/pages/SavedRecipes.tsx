@@ -1,40 +1,32 @@
-import { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
 import { Recipe, UserType } from '../utils/types';
-import { getCategoryRecipes } from '../services/recipeService';
 import DisplayRecipes from '../components/DisplayRecipes';
+import { useNavigate } from 'react-router-dom';
 
-interface CategoryPageProps {
-  category: string
+interface SavedRecipesProps {
   savedRecipes: Recipe[]
   handleSave: (recipe: Recipe) => void
   handleRemoveSave: (recipe: Recipe) => void
   loggedInUser: UserType | null
 }
 
-const CategoryPage = ({
-  category,
+const SavedRecipes = ({
   savedRecipes,
   handleSave,
   handleRemoveSave,
   loggedInUser,
-}: CategoryPageProps) => {
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
+}: SavedRecipesProps) => {
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchRecipes = async () => {
-      const results = await getCategoryRecipes(category);
-      setRecipes(results);
-    };
-
-    fetchRecipes();
-  }, [category]);
+  if (!loggedInUser) {
+    navigate('/');
+    return;
+  }
 
   return (
     <Container fluid>
-      <h2 className='pad-left'>{category}</h2>
       <DisplayRecipes
-        recipes={recipes}
+        recipes={savedRecipes}
         savedRecipes={savedRecipes}
         handleSave={handleSave}
         handleRemoveSave={handleRemoveSave}
@@ -44,4 +36,4 @@ const CategoryPage = ({
   );
 };
 
-export default CategoryPage;
+export default SavedRecipes;
