@@ -1,3 +1,8 @@
+:root {
+  --navbar-height: 10vh;
+  --main-height: 90vh;
+}
+
 #root {
   background: linear-gradient(to top, black, lightgray);
   height: 100vh;
@@ -5,7 +10,8 @@
 
 #main-container {
   display: grid;
-  grid-template-rows: 15vh 85vh;
+  grid-template-rows: var(--navbar-height) var(--main-height);
+  padding: 0;
 }
 
 .grid-container {
@@ -14,6 +20,11 @@
   grid-template-columns: repeat(3, 1fr);
   margin: 0 auto !important;
   width: 90vw;
+}
+
+.dropdown-menu.show {
+  left: 50%!important;
+  transform: translate(-50%);
 }
 
 a {
@@ -63,8 +74,8 @@ button {
   background-color: black;
   border-radius: 10px;
   position: absolute;
-  right: 0;
-  top: 3rem;
+  right: 1vh;
+  top: calc(var(--navbar-height) + 1vh);
 }
 
 #logout-btn:hover {
@@ -72,8 +83,15 @@ button {
   color: black;
 }
 
-#nav-logo {
-  height: 10vh;
+#main-logo {
+  height: 100%;
+  margin: 0 auto;
+  width: fit-content;
+}
+
+#main-logo:hover {
+  background-color: #212529;
+  transform: scale(1.2);
 }
 
 #notification-modal {

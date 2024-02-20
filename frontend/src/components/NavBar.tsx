@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { NavDropdown, Navbar } from 'react-bootstrap';
+import { Navbar, NavDropdown } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserType } from '../utils/types';
-import DropdownMenu from './DropdownMenu';
 import LogoutBtn from './LogoutBtn';
+import DropdownMenu from './DropdownMenu';
+
 
 interface NavBarProps {
   loggedInUser: UserType | null
@@ -25,34 +26,30 @@ const NavBar = ({ loggedInUser, handleLogout }: NavBarProps) => {
     <Navbar
       bg='dark'
       data-bs-theme='dark'
-      className='h-100 mx-0 d-flex justify-content-around p-2 rounded'
+      className='h-100 mx-0 d-flex p-2 justify-content-around rounded'
     >
-      {!loggedInUser ? (
-        <>
-          <Link to='/register'>Sign Up</Link>
-          <Link to='/'>
-            <img id="nav-logo" src="/recipes-logo.png" alt="main recipes logo" />
-          </Link>
-          <Link to='/login'>Log In</Link>
-        </>
+      {loggedInUser ? (
+        <Link to='/home'>Home</Link>
       ) : (
-        <>
-          <Link to='/'>Home</Link>
-          <NavDropdown
-            style={{ color: 'whitesmoke' }}
-            title='Categories'
-            onClick={handleVisibleClick}
-          >
-            {isVisible && (
-              <DropdownMenu
-                handleClick={handleVisibleClick}
-              />
-            )}
-          </NavDropdown>
-          <Link to='/profile'>Profile</Link>
-          <LogoutBtn handleLogout={handleLogoutClick} />
-        </>
+        <Link to='/register'>Sign Up</Link>
       )}
+      <NavDropdown
+        style={{
+          color: 'whitesmoke',
+          margin: '0 auto',
+          width: 'fit-content',
+        }}
+        title='Categories'
+        onClick={handleVisibleClick}
+      >
+        {isVisible && <DropdownMenu handleClick={handleVisibleClick} />}
+      </NavDropdown>
+      {loggedInUser ? (
+        <Link to='/profile'>Profile</Link>
+      ) : (
+        <Link to='/login'>Log In</Link>
+      )}
+      {loggedInUser && <LogoutBtn handleLogout={handleLogoutClick} />}
     </Navbar>
   );
 };

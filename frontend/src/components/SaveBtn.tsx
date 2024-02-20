@@ -1,13 +1,20 @@
 import { Button } from 'react-bootstrap';
 import { DashCircleFill, PlusCircleFill } from 'react-bootstrap-icons';
-import { RecipeCardProps } from './RecipeCard';
+import { Recipe } from '../utils/types';
+
+interface SaveBtnProps {
+  recipe: Recipe
+  saved: Recipe[]
+  handleSave: (recipe: string) => void
+  handleRemoveSave: (recipe: string) => void
+}
 
 const SaveBtn = ({
   recipe,
   saved,
   handleSave,
   handleRemoveSave,
-}: RecipeCardProps) => {
+}: SaveBtnProps) => {
   return (
     <Button className='save-btn' variant='dark'>
       {saved.includes(recipe) ? (

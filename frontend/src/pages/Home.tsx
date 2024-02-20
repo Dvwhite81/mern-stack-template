@@ -1,6 +1,6 @@
 import { SyntheticEvent } from 'react';
 import { Container } from 'react-bootstrap';
-import { Recipe } from '../utils/types';
+import { Recipe, UserType } from '../utils/types';
 import DisplayRecipes from '../components/DisplayRecipes';
 import Search from '../components/Search';
 
@@ -12,6 +12,7 @@ interface HomeProps {
   saved: Recipe[]
   handleSave: (recipe: string) => void
   handleRemoveSave: (recipe: string) => void
+  loggedInUser: UserType | null
 }
 
 const Home = ({
@@ -22,6 +23,7 @@ const Home = ({
   saved,
   handleSave,
   handleRemoveSave,
+  loggedInUser,
 }: HomeProps) => {
 
 
@@ -33,6 +35,7 @@ const Home = ({
         saved={saved}
         handleSave={handleSave}
         handleRemoveSave={handleRemoveSave}
+        loggedInUser={loggedInUser}
       />
     </Container>
   );

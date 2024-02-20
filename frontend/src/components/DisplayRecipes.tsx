@@ -1,5 +1,5 @@
 import { Container } from 'react-bootstrap';
-import { Recipe } from '../utils/types';
+import { Recipe, UserType } from '../utils/types';
 import RecipeCard from './RecipeCard';
 
 export interface DisplayProps {
@@ -7,6 +7,7 @@ export interface DisplayProps {
   saved: Recipe[]
   handleSave: (recipeId: string) => void
   handleRemoveSave: (recipeId: string) => void
+  loggedInUser: UserType | null
 }
 
 const DisplayRecipes = ({
@@ -14,6 +15,7 @@ const DisplayRecipes = ({
   saved,
   handleSave,
   handleRemoveSave,
+  loggedInUser,
 }: DisplayProps) => {
   return (
     <Container fluid>
@@ -25,6 +27,7 @@ const DisplayRecipes = ({
             saved={saved}
             handleSave={handleSave}
             handleRemoveSave={handleRemoveSave}
+            loggedInUser={loggedInUser}
           />
         ))}
       </Container>

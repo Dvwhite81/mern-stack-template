@@ -12,7 +12,7 @@ const DropdownMenu = ({ handleClick }: DropdownMenuProps) => {
       {CATEGORIES.map((category) => (
         <NavDropdown.Item
           key={category}
-          style={{ textAlign: 'center' }}
+          style={{ textAlign: 'center',  }}
           onClick={handleClick}
         >
           <Link

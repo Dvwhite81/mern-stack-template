@@ -1,13 +1,14 @@
 import { Card, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { Recipe } from '../utils/types';
+import { Recipe, UserType } from '../utils/types';
 import SaveBtn from './SaveBtn';
 
-export interface RecipeCardProps {
+interface RecipeCardProps {
   recipe: Recipe
   saved: Recipe[]
   handleSave: (recipe: string) => void
   handleRemoveSave: (recipe: string) => void
+  loggedInUser: UserType | null
 }
 
 const RecipeCard = ({
@@ -15,6 +16,7 @@ const RecipeCard = ({
   saved,
   handleSave,
   handleRemoveSave,
+  loggedInUser,
 }: RecipeCardProps) => {
   const { label, image, ingredientLines, url } = recipe;
 
@@ -25,12 +27,14 @@ const RecipeCard = ({
       </Card.Header>
       <Card.Img variant='top' src={image} alt={`${label} image`} />
       <Card.Body>
-        <SaveBtn
-          recipe={recipe}
-          saved={saved}
-          handleSave={handleSave}
-          handleRemoveSave={handleRemoveSave}
-        />
+        {loggedInUser && (
+          <SaveBtn
+            recipe={recipe}
+            saved={saved}
+            handleSave={handleSave}
+            handleRemoveSave={handleRemoveSave}
+          />
+        )}
         <Card.Title>Ingredients</Card.Title>
         <ListGroup>
           {ingredientLines.map((line, idx) => (

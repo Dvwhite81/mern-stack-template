@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
-import { Recipe } from '../utils/types';
+import { Recipe, UserType } from '../utils/types';
 import { getCategoryRecipes } from '../services/recipeService';
 import DisplayRecipes from '../components/DisplayRecipes';
 
@@ -9,6 +9,7 @@ interface CategoryPageProps {
   saved: Recipe[]
   handleSave: (recipe: string) => void
   handleRemoveSave: (recipe: string) => void
+  loggedInUser: UserType | null
 }
 
 const CategoryPage = ({
@@ -16,6 +17,7 @@ const CategoryPage = ({
   saved,
   handleSave,
   handleRemoveSave,
+  loggedInUser,
 }: CategoryPageProps) => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
 
@@ -36,6 +38,7 @@ const CategoryPage = ({
         saved={saved}
         handleSave={handleSave}
         handleRemoveSave={handleRemoveSave}
+        loggedInUser={loggedInUser}
       />
     </Container>
   );
